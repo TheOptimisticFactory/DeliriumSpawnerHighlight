@@ -31,16 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ImGui.NET">
-      <HintPath>..\..\PoeHelper\ImGui.NET.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\..\PoeHelper\SharpDX.dll</HintPath>
+      <HintPath>..\..\..\PoeHelper\SharpDX.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SharpDX.Mathematics">
-      <HintPath>..\..\..\..\..\PoeHelper\SharpDX.Mathematics.dll</HintPath>
+      <HintPath>..\..\..\PoeHelper\SharpDX.Mathematics.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
