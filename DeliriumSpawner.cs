@@ -47,6 +47,7 @@ namespace DeliriumSpawnerHighlight
 
         public override void Render()
         {
+            RemoveNotValidEntities();
             foreach (var spawnerEntity in SpawnerEntities)
             {
                 if (!DeliriumSpawnerTypeHelper.GetSettingsDraw(Settings, spawnerEntity.Value)) continue;
@@ -57,10 +58,24 @@ namespace DeliriumSpawnerHighlight
             }
         }
 
+        private void RemoveNotValidEntities()
+        {
+            var toRemoveList = new List<Entity>();
+            foreach (var spawnerEntity in SpawnerEntities.Keys)
+            {
+                if (!spawnerEntity.IsAlive || !spawnerEntity.IsValid)
+                {
+                    toRemoveList.Add(spawnerEntity);
+                }
+            }
+            foreach (var toRemove in toRemoveList)
+            {
+                SpawnerEntities.Remove(toRemove);
+            }
+        }
+
         private void DrawEntity(Entity entity, Color color, int size)
         {
-            if (!entity.IsAlive) return;
-            if (!entity.IsValid) return;
             var entityPos = GameController.IngameState.Camera.WorldToScreen(entity.Pos);
             Graphics.DrawFrame(new RectangleF(entityPos.X, entityPos.Y, size, size), color, size);
         }
