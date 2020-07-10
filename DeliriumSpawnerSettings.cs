@@ -28,7 +28,7 @@ namespace DeliriumSpawnerHighlight
 
         public DeliriumSpawnerSettings()
         {
-            Enable = new ToggleNode(true);
+            Enable = new ToggleNode(false);
 
             GoodSpawner = new Spawner(
                 new ToggleNode(true),
