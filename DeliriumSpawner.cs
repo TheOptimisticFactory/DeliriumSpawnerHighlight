@@ -1,4 +1,5 @@
 ﻿using ExileCore;
+using ExileCore.PoEMemory.Components;
 using ExileCore.PoEMemory.MemoryObjects;
 using ExileCore.Shared.Enums;
 using SharpDX;
@@ -13,16 +14,22 @@ namespace DeliriumSpawnerHighlight
     public class DeliriumSpawner : BaseSettingsPlugin<DeliriumSpawnerSettings>
     {
 
-        private Dictionary<string, DeliriumSpawnerType> SpawnerMetadataToType = new Dictionary<string, DeliriumSpawnerType>
+        private Dictionary<string, SpawnerType> SpawnerMetadataToType = new Dictionary<string, SpawnerType>
         {
-            { "DoodadDaemonEggFodderSpawner", DeliriumSpawnerType.Good },
-            { "DoodadDaemonGlobSpawn", DeliriumSpawnerType.Good },
-            { "DoodadDaemonBloodBagVolatile", DeliriumSpawnerType.Bad },
-            { "BoneRib", DeliriumSpawnerType.Unknown },
-            { "RibCage", DeliriumSpawnerType.Unknown },
+            { "DoodadDaemonEggFodderSpawner", SpawnerType.Good },
+            { "DoodadDaemonGlobSpawn", SpawnerType.Good },
+            { "DoodadDaemonBloodBagVolatile", SpawnerType.Bad },
+            { "BoneRib", SpawnerType.Unknown },
+            { "RibCage", SpawnerType.Unknown },
+            //Incursion Temple of Azoatl Spawners(Poison Garden)
+            { "InfestationEggGreenParasite", SpawnerType.Good },
+            { "InfestationEggGreenPlatform", SpawnerType.Good },
+            { "InfestationEggGreenSmallPlatform", SpawnerType.Good },
+            { "InfestationEggGreenLargePlatform", SpawnerType.Good }
+
         };
 
-        private Dictionary<Entity, DeliriumSpawnerType> SpawnerEntities = new Dictionary<Entity, DeliriumSpawnerType>();
+        private Dictionary<Entity, SpawnerType> SpawnerEntities = new Dictionary<Entity, SpawnerType>();
 
 
         public override void EntityAdded(Entity entity)
@@ -50,7 +57,19 @@ namespace DeliriumSpawnerHighlight
             RemoveNotValidEntities();
             foreach (var spawnerEntity in SpawnerEntities)
             {
-                if (!DeliriumSpawnerTypeHelper.GetSettingsDraw(Settings, spawnerEntity.Value)) continue;
+                if (!DeliriumSpawnerTypeHelper.GetSettingsDraw(Settings, spawnerEntity.Value)){
+                    continue;
+                }
+                if (spawnerEntity.Key.Metadata.Contains("InfestationEggGreen"))
+                {
+                    if (spawnerEntity.Key.GetComponent<Chest>().IsOpened)
+                    {
+                        continue;
+                    }
+                }else if (!spawnerEntity.Key.IsAlive || !spawnerEntity.Key.IsValid)
+                {
+                    continue;
+                }
 
                 var color = DeliriumSpawnerTypeHelper.GetSettingsColor(Settings, spawnerEntity.Value);
                 var size = DeliriumSpawnerTypeHelper.GetSettingsSize(Settings, spawnerEntity.Value);
